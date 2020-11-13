@@ -1,4 +1,4 @@
-package com.ugd9_x_yyyy.Views;
+package com.ugd9_b_0008.Views;
 
 import android.app.ProgressDialog;
 import android.content.res.Configuration;
@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,10 +24,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ugd9_x_yyyy.API.MahasiswaAPI;
-import com.ugd9_x_yyyy.Adapters.AdapterMahasiswa;
-import com.ugd9_x_yyyy.Models.Mahasiswa;
-import com.ugd9_x_yyyy.R;
+import com.ugd9_b_0008.API.BukuAPI;
+import com.ugd9_b_0008.Adapters.AdapterBuku;
+import com.ugd9_b_0008.Models.Buku;
+import com.ugd9_b_0008.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,21 +38,21 @@ import java.util.List;
 
 import static com.android.volley.Request.Method.GET;
 
+public class ViewsBuku extends Fragment{
 
-public class ViewsMahasiswa extends Fragment {
     private RecyclerView recyclerView;
-    private AdapterMahasiswa adapter;
-    private List<Mahasiswa> listMahasiswa;
+    private AdapterBuku adapter;
+    private List<Buku> listBuku;
     private View view;
+    private AdapterBuku.deleteItemListener mListener;
+    private int orientation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_views_mahasiswa, container, false);
+        view = inflater.inflate(R.layout.fragment_views_buku, container, false);
 
-        setAdapter();
-        getMahasiswa();
-
+        loadDaftarBuku();
         return view;
     }
 
@@ -65,7 +64,7 @@ public class ViewsMahasiswa extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_bar_mahasiswa, menu);
+        inflater.inflate(R.menu.menu_bar_buku, menu);
         super.onCreateOptionsMenu(menu, inflater);
 
         MenuItem searchItem = menu.findItem(R.id.btnSearch);
@@ -98,84 +97,100 @@ public class ViewsMahasiswa extends Fragment {
         if (id == R.id.btnAdd) {
             Bundle data = new Bundle();
             data.putString("status", "tambah");
-            TambahEditMahasiswa tambahEditMahasiswa = new TambahEditMahasiswa();
-            tambahEditMahasiswa.setArguments(data);
+            TambahEditBuku tambahEditBuku = new TambahEditBuku();
+            tambahEditBuku.setArguments(data);
 
-            loadFragment(tambahEditMahasiswa);
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            fragmentManager .beginTransaction()
+                    .replace(R.id.frame_view_buku, tambahEditBuku)
+                    .commit();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void loadDaftarBuku(){
+        setAdapter();
+        getBuku();
+    }
+
     public void setAdapter(){
-        getActivity().setTitle("Data Mahasiswa");
-        listMahasiswa = new ArrayList<Mahasiswa>();
+        getActivity().setTitle("Data Buku");
+        /*Buat tampilan untuk adapter jika potrait menampilkan 2 data dalam 1 baris,
+        sedangakan untuk landscape 4 data dalam 1 baris*/
+        listBuku = new ArrayList<Buku>();
         recyclerView = view.findViewById(R.id.recycler_view);
-        adapter = new AdapterMahasiswa(view.getContext(), listMahasiswa);
-        int orientation = getResources().getConfiguration().orientation;
+        adapter = new AdapterBuku(view.getContext(), listBuku,
+                new AdapterBuku.deleteItemListener() {
+                    @Override
+                    public void deleteItem(Boolean delete) {
+
+                    }
+                });
+
+        orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(),2);
+            // In landscape
+            // set a GridLayoutManager with 3 number of columns
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),4);
+//            gridLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
             recyclerView.setLayoutManager(gridLayoutManager);
         } else {
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
-            recyclerView.setLayoutManager(layoutManager);
+            // In portrait
+            // set a GridLayoutManager with default vertical orientation and 2 number of columns
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),2);
+            recyclerView.setLayoutManager(gridLayoutManager); // set LayoutManager to RecyclerView
         }
+
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
     }
 
-    public void loadFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_view_mahasiswa,fragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    //Fungsi menampilkan data mahasiswa
-    public void getMahasiswa() {
-        //Pendeklarasian queue
+    public void getBuku() {
+        //Tambahkan tampil buku disini
+        //deklarasi queue
         RequestQueue queue = Volley.newRequestQueue(view.getContext());
 
-        //Meminta tanggapan string dari URL yang telah disediakan menggunakan method GET
+        //meminta tanggapan string daari URL yang telah disediakan menggunakan method GET
         //untuk request ini tidak memerlukan parameter
         final ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("loading....");
-        progressDialog.setTitle("Menampilkan data mahasiswa");
+        progressDialog.setTitle("Menampilkan data buku");
         progressDialog.setProgressStyle(android.app.ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
 
-        final JsonObjectRequest stringRequest = new JsonObjectRequest(GET, MahasiswaAPI.URL_SELECT
-                , null, new Response.Listener<JSONObject>() {
+        final JsonObjectRequest stringRequest = new JsonObjectRequest(GET, BukuAPI.URL_SELECT,
+                null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                //Disini bagian jika response jaringan berhasil tidak terdapat ganguan/error
+                //bagian jika response berhasil
                 progressDialog.dismiss();
                 try {
-                    //Mengambil data response json object yang berupa data mahasiswa
-                    JSONArray jsonArray = response.getJSONArray("mahasiswa");
+                    //mengambil data response json object yang berupa data buku
+                    JSONArray jsonArray = response.getJSONArray("dataBuku");
 
-                    if(!listMahasiswa.isEmpty())
-                        listMahasiswa.clear();
+                    if (!listBuku.isEmpty())
+                        listBuku.clear();
 
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        //Mengubah data jsonArray tertentu menjadi json Object
+                        //mengubah data jsonArray tertentu menjadi object
                         JSONObject jsonObject = (JSONObject) jsonArray.get(i);
 
-                        String npm              = jsonObject.optString("npm");
-                        String nama             = jsonObject.optString("nama");
-                        String jenis_kelamin    = jsonObject.optString("jenis_kelamin");
-                        String prodi            = jsonObject.optString("prodi");
+                        Integer idBuku          = jsonObject.optInt("idBuku");
+                        String namaBuku         = jsonObject.optString("namaBuku");
+                        String pengarang        = jsonObject.optString("pengarang");
+                        Double harga            = jsonObject.optDouble("harga");
                         String gambar           = jsonObject.optString("gambar");
 
-                        //Membuat objek user
-                        Mahasiswa mahasiswa = new Mahasiswa(npm, nama, jenis_kelamin, prodi, gambar);
+                        //membuat objek buku
+                        Buku buku =
+                                new Buku(idBuku, namaBuku, pengarang, harga, gambar);
 
-                        //Menambahkan objek user tadi ke list user
-                        listMahasiswa.add(mahasiswa);
+                        //menambahkan obejk user tadi ke list buku
+                        listBuku.add(buku);
                     }
                     adapter.notifyDataSetChanged();
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 Toast.makeText(view.getContext(), response.optString("message"),
@@ -184,14 +199,16 @@ public class ViewsMahasiswa extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //Disini bagian jika response jaringan terdapat ganguan/error
+                //bagian jika response jaringan terdapat gangguan/error
                 progressDialog.dismiss();
                 Toast.makeText(view.getContext(), error.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
         });
 
-        //Disini proses penambahan request yang sudah kita buat ke reuest queue yang sudah dideklarasi
+        //proses penambahan request yang sudah kita buat ke request queue
+        //yang sudah dideklarasi
         queue.add(stringRequest);
     }
+
 }

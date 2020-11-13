@@ -1,4 +1,4 @@
-package com.ugd9_x_yyyy;
+package com.ugd9_b_0008;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -18,9 +18,9 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.ugd9_x_yyyy.Views.ViewsBuku;
-import com.ugd9_x_yyyy.Views.ViewsCart;
-import com.ugd9_x_yyyy.Views.ViewsMahasiswa;
+import com.ugd9_c_9861.Views.ViewsBuku;
+import com.ugd9_c_9861.Views.ViewsCart;
+import com.ugd9_c_9861.Views.ViewsMahasiswa;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.ugd9_x_yyyy.Adapters;
+package com.ugd9_b_0008.Adapters;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,11 +28,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.ugd9_x_yyyy.API.BukuAPI;
-import com.ugd9_x_yyyy.Models.Buku;
-import com.ugd9_x_yyyy.R;
-import com.ugd9_x_yyyy.Views.TambahEditBuku;
-import com.ugd9_x_yyyy.Views.ViewsBuku;
+import com.ugd9_b_0008.API.BukuAPI;
+import com.ugd9_b_0008.Models.Buku;
+import com.ugd9_b_0008.R;
+import com.ugd9_b_0008.Views.TambahEditBuku;
+import com.ugd9_b_0008.Views.ViewsBuku;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +42,8 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.android.volley.Request.Method.POST;
+import static com.android.volley.Request.Method.DELETE;
+import static com.android.volley.Request.Method.PUT;
 
 public class AdapterBuku extends RecyclerView.Adapter<AdapterBuku.adapterBukuViewHolder> {
 
@@ -51,11 +51,19 @@ public class AdapterBuku extends RecyclerView.Adapter<AdapterBuku.adapterBukuVie
     private List<Buku> bukuListFiltered;
     private Context context;
     private View view;
+    private AdapterBuku.deleteItemListener mListener;
+    private String idBuku;
 
-    public AdapterBuku(Context context, List<Buku> bukuList) {
+    public AdapterBuku(Context context, List<Buku> bukuList,
+                       AdapterBuku.deleteItemListener mListener) {
         this.context            = context;
         this.bukuList           = bukuList;
         this.bukuListFiltered   = bukuList;
+        this.mListener          = mListener;
+    }
+
+    public interface deleteItemListener {
+        void deleteItem( Boolean delete);
     }
 
     @NonNull
@@ -101,7 +109,8 @@ public class AdapterBuku extends RecyclerView.Adapter<AdapterBuku.adapterBukuVie
                 builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        deleteBuku(buku.getIdBuku());
+                        idBuku = String.valueOf(buku.getIdBuku());
+                        deleteBuku();
                     }
                 });
                 builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
@@ -176,30 +185,36 @@ public class AdapterBuku extends RecyclerView.Adapter<AdapterBuku.adapterBukuVie
                 .commit();
     }
 
-    public void deleteBuku(int idBuku){
+    public void deleteBuku(){
+        //Tambahkan hapus buku disini
         RequestQueue queue = Volley.newRequestQueue(context);
 
         final ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("loading....");
         progressDialog.setTitle("Menghapus data buku");
-        progressDialog.setProgressStyle(android.app.ProgressDialog.STYLE_SPINNER);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
-        //Meminta
-        StringRequest stringRequest = new StringRequest(POST, BukuAPI.URL_DELETE+idBuku, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                progressDialog.dismiss();
-                try {
-                    JSONObject obj = new JSONObject(response);
-                    Toast.makeText(context, obj.getString("message"), Toast.LENGTH_SHORT).show();
-                    notifyDataSetChanged();
-                    loadFragment(new ViewsBuku());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
+
+        //memulai membuat permintaan request menghapus data ke jaringan
+        StringRequest stringRequest = new StringRequest(DELETE, BukuAPI.URL_DELETE + idBuku,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        try {
+                            //mengubah response string menjadi objek
+                            JSONObject obj = new JSONObject(response);
+
+                            //obj.getString("message") digunakan untuk mengambil pesan dari response
+                            Toast.makeText(context, obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            notifyDataSetChanged();
+                            loadFragment(new ViewsBuku());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
@@ -207,6 +222,8 @@ public class AdapterBuku extends RecyclerView.Adapter<AdapterBuku.adapterBukuVie
             }
         });
 
+        //proses penambahan request yang sudah kita buat ke request queue
+        //yang sudah dideklarasi
         queue.add(stringRequest);
     }
 }

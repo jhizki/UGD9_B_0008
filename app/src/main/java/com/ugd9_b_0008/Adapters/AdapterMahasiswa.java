@@ -1,4 +1,4 @@
-package com.ugd9_x_yyyy.Adapters;
+package com.ugd9_b_0008.Adapters;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,11 +27,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.ugd9_x_yyyy.API.MahasiswaAPI;
-import com.ugd9_x_yyyy.Models.Mahasiswa;
-import com.ugd9_x_yyyy.R;
-import com.ugd9_x_yyyy.Views.TambahEditMahasiswa;
-import com.ugd9_x_yyyy.Views.ViewsMahasiswa;
+import com.ugd9_b_0008.API.MahasiswaAPI;
+import com.ugd9_b_0008.Models.Mahasiswa;
+import com.ugd9_b_0008.R;
+import com.ugd9_b_0008.Views.TambahEditMahasiswa;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +38,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.android.volley.Request.Method.POST;
+import static com.android.volley.Request.Method.DELETE;
 
 public class AdapterMahasiswa extends RecyclerView.Adapter<AdapterMahasiswa.adapterUserViewHolder> {
 
@@ -47,11 +46,18 @@ public class AdapterMahasiswa extends RecyclerView.Adapter<AdapterMahasiswa.adap
     private List<Mahasiswa> mahasiswaListFiltered;
     private Context context;
     private View view;
+    private AdapterMahasiswa.deleteItemListener mListener;
 
-    public AdapterMahasiswa(Context context, List<Mahasiswa> mahasiswaList) {
-        this.context=context;
-        this.mahasiswaList = mahasiswaList;
-        this.mahasiswaListFiltered = mahasiswaList;
+    public AdapterMahasiswa(Context context, List<Mahasiswa> mahasiswaList,
+                            AdapterMahasiswa.deleteItemListener mListener) {
+        this.context                =context;
+        this.mahasiswaList          = mahasiswaList;
+        this.mahasiswaListFiltered  = mahasiswaList;
+        this.mListener              = mListener;
+    }
+
+    public interface deleteItemListener {
+        void deleteItem( Boolean delete);
     }
 
     @NonNull
@@ -179,7 +185,7 @@ public class AdapterMahasiswa extends RecyclerView.Adapter<AdapterMahasiswa.adap
         progressDialog.show();
 
         //Memulai membuat permintaan request menghapus data ke jaringan
-        StringRequest stringRequest = new StringRequest(POST, MahasiswaAPI.URL_DELETE + npm, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(DELETE, MahasiswaAPI.URL_DELETE + npm, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //Disini bagian jika response jaringan berhasil tidak terdapat ganguan/error
@@ -190,7 +196,7 @@ public class AdapterMahasiswa extends RecyclerView.Adapter<AdapterMahasiswa.adap
                     //obj.getString("message") digunakan untuk mengambil pesan message dari response
                     Toast.makeText(context, obj.getString("message"), Toast.LENGTH_SHORT).show();
                     notifyDataSetChanged();
-                    loadFragment(new ViewsMahasiswa());
+                    mListener.deleteItem(true);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -1,4 +1,4 @@
-package com.ugd9_x_yyyy.SwipeMenu;
+package com.ugd9_b_0008.SwipeMenu;
 
 public enum State {
     LEFTOPEN,

@@ -1,4 +1,4 @@
-package com.ugd9_x_yyyy.Views;
+package com.ugd9_b_0008.Views;
 
 import android.app.ProgressDialog;
 import android.os.Build;
@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,9 +27,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.ugd9_x_yyyy.API.MahasiswaAPI;
-import com.ugd9_x_yyyy.Models.Mahasiswa;
-import com.ugd9_x_yyyy.R;
+import com.ugd9_b_0008.API.MahasiswaAPI;
+import com.ugd9_b_0008.Models.Mahasiswa;
+import com.ugd9_b_0008.R;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -40,6 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.android.volley.Request.Method.POST;
+import static com.android.volley.Request.Method.PUT;
 
 
 public class TambahEditMahasiswa extends Fragment {
@@ -280,7 +280,7 @@ public class TambahEditMahasiswa extends Fragment {
         progressDialog.show();
 
         //Memulai membuat permintaan request menghapus data ke jaringan
-        StringRequest  stringRequest = new StringRequest(POST, MahasiswaAPI.URL_UPDATE + npm, new Response.Listener<String>() {
+        StringRequest  stringRequest = new StringRequest(PUT, MahasiswaAPI.URL_UPDATE + npm, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //Disini bagian jika response jaringan berhasil tidak terdapat ganguan/error

@@ -1,9 +1,8 @@
-package com.ugd9_x_yyyy.Views;
+package com.ugd9_b_0008.Views;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,11 +12,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,24 +35,22 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.textfield.TextInputEditText;
-import com.ugd9_x_yyyy.API.BukuAPI;
-import com.ugd9_x_yyyy.API.MahasiswaAPI;
-import com.ugd9_x_yyyy.Models.Buku;
-import com.ugd9_x_yyyy.R;
+import com.ugd9_b_0008.API.BukuAPI;
+import com.ugd9_b_0008.API.MahasiswaAPI;
+import com.ugd9_b_0008.Models.Buku;
+import com.ugd9_b_0008.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 import static com.android.volley.Request.Method.POST;
+import static com.android.volley.Request.Method.PUT;
 
 
 public class TambahEditBuku extends Fragment {
@@ -70,6 +65,7 @@ public class TambahEditBuku extends Fragment {
     private Bitmap bitmap;
     private Uri selectedImage = null;
     private static final int PERMISSION_CODE = 1000;
+    private String imageString;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -199,9 +195,9 @@ public class TambahEditBuku extends Fragment {
                     Double harga     = Double.parseDouble(txtHarga.getText().toString());
                     buku = new Buku(namaBuku, pengarang, harga);
                     if(status.equals("tambah"))
-                        tambahBuku(buku);
+                        tambahBuku(namaBuku, pengarang, harga, imageString);
                     else
-                        editBuku(buku,idBuku);
+                        editBuku(idBuku, namaBuku, pengarang, harga, imageString);
                 }
             }
         });
@@ -229,8 +225,7 @@ public class TambahEditBuku extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
             case PERMISSION_CODE:{
-                if(grantResults.length > 0 && grantResults[0] ==
-                        PackageManager.PERMISSION_GRANTED){
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     if(selected.equals("kamera"))
                         openCamera();
                     else
@@ -299,16 +294,18 @@ public class TambahEditBuku extends Fragment {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-    private String imageToString(Bitmap bitmap){
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100, outputStream);
-        byte[] imageBytes = outputStream.toByteArray();
+    private String encodeImage(Bitmap bitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] imageBytes = byteArrayOutputStream.toByteArray();
+        imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-        String encodeImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodeImage;
+        return imageString;
     }
 
-    public void tambahBuku(final Buku buku){
+    public void tambahBuku(final String namaBuku, final String pengarang, final Double harga, final String gambar){
+        //Tambahkan tambah buku disini
+        //Pendeklarasian queue
         RequestQueue queue = Volley.newRequestQueue(getContext());
 
         final ProgressDialog progressDialog;
@@ -318,17 +315,22 @@ public class TambahEditBuku extends Fragment {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
 
+        //Memulai membuat permintaan request menambah data ke jaringan
         StringRequest stringRequest = new StringRequest(POST, BukuAPI.URL_ADD, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                //Disini bagian jika response jaringan berhasil tidak terdapat ganguan/error
                 progressDialog.dismiss();
                 try {
+                    //Mengubah response string menjadi object
                     JSONObject obj = new JSONObject(response);
+                    //obj.getString("message") digunakan untuk mengambil pesan status dari response
                     if(obj.getString("status").equals("Success"))
                     {
                         loadFragment(new ViewsBuku());
                     }
 
+                    //obj.getString("message") digunakan untuk mengambil pesan message dari response
                     Toast.makeText(getContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -337,6 +339,7 @@ public class TambahEditBuku extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                //Disini bagian jika response jaringan terdapat ganguan/error
                 progressDialog.dismiss();
                 Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -344,13 +347,17 @@ public class TambahEditBuku extends Fragment {
             @Override
             protected Map<String, String> getParams()
             {
+                /*
+                    Disini adalah proses memasukan/mengirimkan parameter key dengan data value,
+                    dan nama key nya harus sesuai dengan parameter key yang diminta oleh jaringan
+                    API.
+                */
                 Map<String, String>  params = new HashMap<String, String>();
-                params.put("namaBuku", buku.getNamaBuku());
-                params.put("pengarang", buku.getPengarang());
-                params.put("harga", String.valueOf(buku.getHarga()));
-
+                params.put("namaBuku", namaBuku);
+                params.put("pengarang", pengarang);
+                params.put("harga", String.valueOf(harga));
                 if(bitmap != null){
-                    String imageData = imageToString(bitmap);
+                    String imageData = encodeImage(bitmap);
                     params.put("gambar", imageData);
                 }
 
@@ -358,10 +365,12 @@ public class TambahEditBuku extends Fragment {
             }
         };
 
+        //Disini proses penambahan request yang sudah kita buat ke reuest queue yang sudah dideklarasi
         queue.add(stringRequest);
     }
 
-    public void editBuku(final Buku buku, int idBuku) {
+    public void editBuku(final int idBuku, final String namaBuku, final String pengarang, final Double harga, final String gambar) {
+        //Tambahkan edit buku disini
         RequestQueue queue = Volley.newRequestQueue(getContext());
 
         final ProgressDialog progressDialog;
@@ -371,17 +380,22 @@ public class TambahEditBuku extends Fragment {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
 
-        StringRequest stringRequest = new StringRequest(POST, BukuAPI.URL_UPDATE+idBuku, new Response.Listener<String>() {
+        //Memulai membuat permintaan request menghapus data ke jaringan
+        StringRequest  stringRequest = new StringRequest(PUT, BukuAPI.URL_UPDATE + String.valueOf(idBuku), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                //Disini bagian jika response jaringan berhasil tidak terdapat ganguan/error
                 progressDialog.dismiss();
                 try {
+                    //Mengubah response string menjadi object
                     JSONObject obj = new JSONObject(response);
+
                     if(obj.getString("status").equals("Success"))
                     {
                         loadFragment(new ViewsBuku());
                     }
 
+                    //obj.getString("message") digunakan untuk mengambil pesan message dari response
                     Toast.makeText(getContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -390,6 +404,7 @@ public class TambahEditBuku extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                //Disini bagian jika response jaringan terdapat ganguan/error
                 progressDialog.dismiss();
                 Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -397,20 +412,28 @@ public class TambahEditBuku extends Fragment {
             @Override
             protected Map<String, String> getParams()
             {
+                /*
+                    Disini adalah proses memasukan/mengirimkan parameter key dengan data value,
+                    dan nama key nya harus sesuai dengan parameter key yang diminta oleh jaringan
+                    API.
+                */
                 Map<String, String>  params = new HashMap<String, String>();
-                params.put("namaBuku", buku.getNamaBuku());
-                params.put("pengarang", buku.getPengarang());
-                params.put("harga", String.valueOf(buku.getHarga()));
+                params.put("namaBuku", namaBuku);
+                params.put("pengarang", pengarang);
+                params.put("harga", String.valueOf(harga));
 
                 if(bitmap != null)
                 {
-                    String imageData = imageToString(bitmap);
+                    String imageData = encodeImage(bitmap);
                     params.put("gambar", imageData);
                 }
+
                 return params;
             }
         };
 
+        //Disini proses penambahan request yang sudah kita buat ke reuest queue yang sudah dideklarasi
         queue.add(stringRequest);
     }
+
 }

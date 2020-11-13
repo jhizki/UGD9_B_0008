@@ -1,13 +1,15 @@
-package com.ugd9_x_yyyy.Adapters;
+package com.ugd9_b_0008.Adapters;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +18,14 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.ugd9_x_yyyy.Models.DTBuku;
-import com.ugd9_x_yyyy.Models.TransaksiBuku;
-import com.ugd9_x_yyyy.R;
+import com.ugd9_b_0008.Models.Buku;
+import com.ugd9_b_0008.Models.DTBuku;
+import com.ugd9_b_0008.Models.TransaksiBuku;
+import com.ugd9_b_0008.R;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterTransaksiBuku extends RecyclerView.Adapter<AdapterTransaksiBuku.adapterItemViewHolder> {
@@ -32,6 +36,8 @@ public class AdapterTransaksiBuku extends RecyclerView.Adapter<AdapterTransaksiB
     private View view;
     private Double totalBiaya, subTotal;
     private OnQuantityChangeListener mListener;
+    private List<DTBuku> listDTBuku;
+    private int orientation;
 
     public AdapterTransaksiBuku(Context context, List<TransaksiBuku> transaksiBukuList,
                                 OnQuantityChangeListener mListener) {
@@ -100,11 +106,6 @@ public class AdapterTransaksiBuku extends RecyclerView.Adapter<AdapterTransaksiB
             }
         });
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(
-                holder.recyclerView.getContext(),
-                LinearLayoutManager.VERTICAL,
-                false
-        );
         adapterDTBuku = new AdapterDTBuku(view.getContext(),
                 transaksiBuku.getDtBukuList(), new AdapterDTBuku.OnQuantityChangeListener() {
             @Override
@@ -129,7 +130,23 @@ public class AdapterTransaksiBuku extends RecyclerView.Adapter<AdapterTransaksiB
                         isEmptyChecked());
             }
         });
-        holder.recyclerView.setLayoutManager(layoutManager);
+        //Modifikasi code disini
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
+        orientation = context.getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // In landscape
+            // set a GridLayoutManager with 3 number of columns
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(context,2);
+//            gridLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
+            holder.recyclerView.setLayoutManager(gridLayoutManager);
+        } else {
+            // In portrait
+            // set a GridLayoutManager with default vertical orientation and 2 number of columns
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(context,1);
+            holder.recyclerView.setLayoutManager(gridLayoutManager); // set LayoutManager to RecyclerView
+        }
+        //
+
         holder.recyclerView.setItemAnimator(new DefaultItemAnimator());
         holder.recyclerView.setAdapter(adapterDTBuku);
     }

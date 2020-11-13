@@ -1,10 +1,10 @@
-package com.ugd9_x_yyyy.Views;
+package com.ugd9_b_0008.Views;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,11 +24,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ugd9_x_yyyy.API.TransaksiBukuAPI;
-import com.ugd9_x_yyyy.Adapters.AdapterTransaksiBuku;
-import com.ugd9_x_yyyy.Models.DTBuku;
-import com.ugd9_x_yyyy.Models.TransaksiBuku;
-import com.ugd9_x_yyyy.R;
+import com.ugd9_b_0008.API.BukuAPI;
+import com.ugd9_b_0008.API.TransaksiBukuAPI;
+import com.ugd9_b_0008.Adapters.AdapterDTBuku;
+import com.ugd9_b_0008.Adapters.AdapterTransaksiBuku;
+import com.ugd9_b_0008.Models.Buku;
+import com.ugd9_b_0008.Models.DTBuku;
+import com.ugd9_b_0008.Models.TransaksiBuku;
+import com.ugd9_b_0008.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,6 +55,7 @@ public class ViewsCart extends Fragment{
     private List<TransaksiBuku> transaksiBukuList;
     private View view;
     public Boolean isFullChecked;
+    private List<DTBuku> listDTBuku;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -124,7 +128,7 @@ public class ViewsCart extends Fragment{
 
     public void setAdapter(){
         getActivity().setTitle("Cart");
-        transaksiBukuList = new ArrayList<>();
+        transaksiBukuList = new ArrayList<TransaksiBuku>();
         adapter = new AdapterTransaksiBuku(view.getContext(), transaksiBukuList,
                 new AdapterTransaksiBuku.OnQuantityChangeListener() {
                     @Override
@@ -166,10 +170,11 @@ public class ViewsCart extends Fragment{
     }
 
     public void getTransaksi() {
+        //Tambahkan tampil transaksi buku disini
         final RequestQueue queue = Volley.newRequestQueue(view.getContext());
 
-        final JsonObjectRequest stringRequest = new JsonObjectRequest(GET, TransaksiBukuAPI.URL_SELECT
-                , null, new Response.Listener<JSONObject>() {
+        final JsonObjectRequest stringRequest = new JsonObjectRequest(GET, TransaksiBukuAPI.URL_SELECT,
+                null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -224,11 +229,16 @@ public class ViewsCart extends Fragment{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                //bagian jika response jaringan terdapat gangguan/error
+//                progressDialog.dismiss();
                 Toast.makeText(view.getContext(), error.getMessage(),
                         Toast.LENGTH_SHORT).show();
             }
         });
 
+        //proses penambahan request yang sudah kita buat ke request queue
+        //yang sudah dideklarasi
         queue.add(stringRequest);
     }
+
 }

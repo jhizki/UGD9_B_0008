@@ -1,17 +1,10 @@
-package com.ugd9_x_yyyy.Adapters;
+package com.ugd9_b_0008.Adapters;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -23,29 +16,15 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.ugd9_x_yyyy.Models.DTBuku;
-import com.ugd9_x_yyyy.R;
-import com.ugd9_x_yyyy.Views.ViewsCart;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.ugd9_b_0008.Models.DTBuku;
+import com.ugd9_b_0008.R;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static com.android.volley.Request.Method.POST;
 
 public class AdapterDTBuku extends RecyclerView.Adapter<AdapterDTBuku.adapterSubItemViewHolder> {
 
