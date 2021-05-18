@@ -1,4 +1,4 @@
-package com.ugd9_b_0008.Views;
+package com.atmakoreanbarbeque.Views;
 
 import android.app.ProgressDialog;
 import android.os.Build;
@@ -27,9 +27,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.ugd9_b_0008.API.MahasiswaAPI;
-import com.ugd9_b_0008.Models.Mahasiswa;
-import com.ugd9_b_0008.R;
+import com.atmakoreanbarbeque.API.MahasiswaAPI;
+import com.atmakoreanbarbeque.Models.Mahasiswa;
+import com.atmakoreanbarbeque.R;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -134,20 +134,20 @@ public class TambahEditMahasiswa extends Fragment {
         else
         {
             txtNpm.setEnabled(false);
-            txtNama.setText(mahasiswa.getNama());
-            txtNpm.setText(mahasiswa.getNpm());
+            txtNama.setText(mahasiswa.getNamaMenu());
+            txtNpm.setText(mahasiswa.getIdMenu());
             for(String jk : JKArray)
             {
-                if(jk.equals(mahasiswa.getJenis_kelamin()))
+                if(jk.equals(mahasiswa.getDeskripsiMenu()))
                     selectedJenisKelamin = jk;
             }
             for(String prodi : ProdiArray)
             {
-                if(prodi.equals(mahasiswa.getProdi()))
+                if(prodi.equals(mahasiswa.getHarga()))
                     selectedProdi = prodi;
             }
             Glide.with(getContext())
-                    .load(mahasiswa.getGambar())
+                    .load("https://1080motion.com/wp-content/uploads/2018/06/NoImageFound.jpg.png")
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(ivGambar);

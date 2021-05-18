@@ -1,4 +1,4 @@
-package com.ugd9_b_0008.Adapters;
+package com.atmakoreanbarbeque.Adapters;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,8 +19,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.ugd9_b_0008.Models.DTBuku;
-import com.ugd9_b_0008.R;
+import com.atmakoreanbarbeque.Models.DTBuku;
+import com.atmakoreanbarbeque.R;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

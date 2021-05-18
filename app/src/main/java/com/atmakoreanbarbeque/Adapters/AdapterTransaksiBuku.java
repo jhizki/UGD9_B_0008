@@ -1,10 +1,9 @@
-package com.ugd9_b_0008.Adapters;
+package com.atmakoreanbarbeque.Adapters;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
@@ -18,14 +17,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.ugd9_b_0008.Models.Buku;
-import com.ugd9_b_0008.Models.DTBuku;
-import com.ugd9_b_0008.Models.TransaksiBuku;
-import com.ugd9_b_0008.R;
+import com.atmakoreanbarbeque.Models.DTBuku;
+import com.atmakoreanbarbeque.Models.TransaksiBuku;
+import com.atmakoreanbarbeque.R;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterTransaksiBuku extends RecyclerView.Adapter<AdapterTransaksiBuku.adapterItemViewHolder> {

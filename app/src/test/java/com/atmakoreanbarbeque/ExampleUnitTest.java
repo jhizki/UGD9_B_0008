@@ -1,4 +1,4 @@
-package com.ugd9_b_0008;
+package com.atmakoreanbarbeque;
 
 import org.junit.Test;
 

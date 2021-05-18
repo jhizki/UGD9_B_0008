@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context="com.ugd9_b_0008.Views.ViewsBuku">
+    tools:context="com.atmakoreanbarbeque.Views.ViewsBuku">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#BADEF4"
+        android:background="#F9DEC9"
         android:padding="5dp" />
 
 </FrameLayout>

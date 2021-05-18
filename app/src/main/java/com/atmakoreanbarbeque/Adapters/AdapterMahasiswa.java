@@ -1,4 +1,4 @@
-package com.ugd9_b_0008.Adapters;
+package com.atmakoreanbarbeque.Adapters;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,10 +27,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.ugd9_b_0008.API.MahasiswaAPI;
-import com.ugd9_b_0008.Models.Mahasiswa;
-import com.ugd9_b_0008.R;
-import com.ugd9_b_0008.Views.TambahEditMahasiswa;
+import com.atmakoreanbarbeque.API.MahasiswaAPI;
+import com.atmakoreanbarbeque.Models.Mahasiswa;
+import com.atmakoreanbarbeque.R;
+import com.atmakoreanbarbeque.Views.TambahEditMahasiswa;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,53 +72,16 @@ public class AdapterMahasiswa extends RecyclerView.Adapter<AdapterMahasiswa.adap
     public void onBindViewHolder(@NonNull adapterUserViewHolder holder, int position) {
         final Mahasiswa mahasiswa = mahasiswaListFiltered.get(position);
 
-        holder.txtNama.setText(mahasiswa.getNama());
-        holder.txtNpm.setText(mahasiswa.getNpm());
-        holder.txtJenisKelamin.setText(mahasiswa.getJenis_kelamin());
-        holder.txtProdi.setText(mahasiswa.getProdi());
+        holder.txtNama.setText(mahasiswa.getNamaMenu());
+        holder.txtNpm.setText(mahasiswa.getIdMenu());
+        holder.txtJenisKelamin.setText(mahasiswa.getDeskripsiMenu());
+        holder.txtProdi.setText(mahasiswa.getIdMenu());
         Glide.with(context)
-                .load(mahasiswa.getGambar())
+                .load("https://1080motion.com/wp-content/uploads/2018/06/NoImageFound.jpg.png")
                 .circleCrop()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(holder.ivGambar);
-
-        holder.ivEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                Bundle data = new Bundle();
-                data.putSerializable("mahasiswa", mahasiswa);
-                data.putString("status", "edit");
-                TambahEditMahasiswa tambahEditMahasiswa = new TambahEditMahasiswa();
-                tambahEditMahasiswa.setArguments(data);
-                loadFragment(tambahEditMahasiswa);
-            }
-        });
-
-        holder.ivHapus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("Anda yakin ingin menghapus mahasiswa ?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteMahasiswa(mahasiswa.getNpm());
-
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        notifyDataSetChanged();
-                        dialog.cancel();
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-        });
     }
 
     @Override
@@ -153,8 +116,7 @@ public class AdapterMahasiswa extends RecyclerView.Adapter<AdapterMahasiswa.adap
                 else {
                     List<Mahasiswa> filteredList = new ArrayList<>();
                     for(Mahasiswa mahasiswa : mahasiswaList) {
-                        if(mahasiswa.getNama().toLowerCase().contains(userInput) ||
-                                mahasiswa.getNpm().toLowerCase().contains(userInput)) {
+                        if(mahasiswa.getNamaMenu().toLowerCase().contains(userInput)) {
                             filteredList.add(mahasiswa);
                         }
                     }
@@ -173,7 +135,7 @@ public class AdapterMahasiswa extends RecyclerView.Adapter<AdapterMahasiswa.adap
     }
 
     //Fungsi menghapus data mahasiswa
-    public void deleteMahasiswa(String npm){
+    public void deleteMahasiswa(Integer idMenu){
         //Pendeklarasian queue
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -185,7 +147,7 @@ public class AdapterMahasiswa extends RecyclerView.Adapter<AdapterMahasiswa.adap
         progressDialog.show();
 
         //Memulai membuat permintaan request menghapus data ke jaringan
-        StringRequest stringRequest = new StringRequest(DELETE, MahasiswaAPI.URL_DELETE + npm, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(DELETE, MahasiswaAPI.URL_DELETE + idMenu, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //Disini bagian jika response jaringan berhasil tidak terdapat ganguan/error

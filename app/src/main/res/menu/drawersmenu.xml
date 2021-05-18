@@ -20,11 +20,18 @@
             app:showAsAction="never"></item>
 
         <item
-            android:id="@+id/transaksi"
+            android:id="@+id/scanqr"
             android:icon="@drawable/ic_baseline_shopping_cart_24"
             android:iconTint="#0091EA"
-            android:title="Transaksi"
+            android:title="Scan Qr"
             app:showAsAction="never"></item>
+
+<!--        <item-->
+<!--            android:id="@+id/transaksi"-->
+<!--            android:icon="@drawable/ic_baseline_shopping_cart_24"-->
+<!--            android:iconTint="#0091EA"-->
+<!--            android:title="Transaksi"-->
+<!--            app:showAsAction="never"></item>-->
 
         <item
             android:id="@+id/keluar"

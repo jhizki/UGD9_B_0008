@@ -1,4 +1,4 @@
-package com.ugd9_b_0008.Models;
+package com.atmakoreanbarbeque.Models;
 
 import java.io.Serializable;
 

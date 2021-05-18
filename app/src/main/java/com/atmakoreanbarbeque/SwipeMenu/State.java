@@ -1,4 +1,4 @@
-package com.ugd9_b_0008.SwipeMenu;
+package com.atmakoreanbarbeque.SwipeMenu;
 
 public enum State {
     LEFTOPEN,

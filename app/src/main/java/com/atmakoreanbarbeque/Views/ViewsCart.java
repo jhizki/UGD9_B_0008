@@ -1,6 +1,5 @@
-package com.ugd9_b_0008.Views;
+package com.atmakoreanbarbeque.Views;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,14 +23,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ugd9_b_0008.API.BukuAPI;
-import com.ugd9_b_0008.API.TransaksiBukuAPI;
-import com.ugd9_b_0008.Adapters.AdapterDTBuku;
-import com.ugd9_b_0008.Adapters.AdapterTransaksiBuku;
-import com.ugd9_b_0008.Models.Buku;
-import com.ugd9_b_0008.Models.DTBuku;
-import com.ugd9_b_0008.Models.TransaksiBuku;
-import com.ugd9_b_0008.R;
+import com.atmakoreanbarbeque.API.TransaksiBukuAPI;
+import com.atmakoreanbarbeque.Adapters.AdapterTransaksiBuku;
+import com.atmakoreanbarbeque.Models.DTBuku;
+import com.atmakoreanbarbeque.Models.TransaksiBuku;
+import com.atmakoreanbarbeque.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,4 +1,4 @@
-package com.ugd9_b_0008;
+package com.atmakoreanbarbeque;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -18,9 +18,10 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.ugd9_b_0008.Views.ViewsBuku;
-import com.ugd9_b_0008.Views.ViewsCart;
-import com.ugd9_b_0008.Views.ViewsMahasiswa;
+import com.atmakoreanbarbeque.Views.ViewsBuku;
+import com.atmakoreanbarbeque.Views.ScanQr;
+import com.atmakoreanbarbeque.Views.ViewsCart;
+import com.atmakoreanbarbeque.Views.ViewsMahasiswa;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -77,9 +78,12 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.buku :
                         loadFragment(new ViewsBuku());
                         break;
-                    case R.id.transaksi :
-                        loadFragment(new ViewsCart());
+                    case R.id.scanqr :
+                        loadFragment(new ScanQr());
                         break;
+                    //case R.id.transaksi :
+                        //loadFragment(new ViewsCart());
+                        //break;
                     case R.id.keluar :
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setMessage("Anda yakin ingin keluar ?");

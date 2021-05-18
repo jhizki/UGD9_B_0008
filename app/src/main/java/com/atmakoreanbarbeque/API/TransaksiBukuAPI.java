@@ -1,4 +1,4 @@
-package com.ugd9_b_0008.API;
+package com.atmakoreanbarbeque.API;
 
 public class TransaksiBukuAPI {
     public static final String ROOT_URL   = "https://pbp.pelangidb.com/";
