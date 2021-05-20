@@ -86,7 +86,7 @@ public class ViewsBuku extends Fragment{
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.btnSearch).setVisible(true);
-        menu.findItem(R.id.btnAdd).setVisible(true);
+        menu.findItem(R.id.btnAdd).setVisible(false);
     }
 
     public void loadDaftarBuku(){
@@ -95,7 +95,7 @@ public class ViewsBuku extends Fragment{
     }
 
     public void setAdapter(){
-        getActivity().setTitle("Data Buku");
+        getActivity().setTitle("Data Menu");
         /*Buat tampilan untuk adapter jika potrait menampilkan 2 data dalam 1 baris,
         sedangakan untuk landscape 4 data dalam 1 baris*/
         listBuku = new ArrayList<Buku>();
@@ -136,7 +136,7 @@ public class ViewsBuku extends Fragment{
         final ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(view.getContext());
         progressDialog.setMessage("loading....");
-        progressDialog.setTitle("Menampilkan data buku");
+        progressDialog.setTitle("Menampilkan data menu");
         progressDialog.setProgressStyle(android.app.ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
 
@@ -148,7 +148,7 @@ public class ViewsBuku extends Fragment{
                 progressDialog.dismiss();
                 try {
                     //mengambil data response json object yang berupa data buku
-                    JSONArray jsonArray = response.getJSONArray("dataBuku");
+                    JSONArray jsonArray = response.getJSONArray("data");
 
                     if (!listBuku.isEmpty())
                         listBuku.clear();
@@ -163,11 +163,12 @@ public class ViewsBuku extends Fragment{
                         String unit_menu = jsonObject.optString("unit_menu");
                         String nama_menu         = jsonObject.optString("nama_menu");
                         String deskripsi_menu        = jsonObject.optString("deskripsi_menu");
+                        String path        = jsonObject.optString("path");
                         Double harga_menu            = jsonObject.optDouble("harga_menu");
 
                         //membuat objek buku
                         Buku buku =
-                                new Buku(id_menu, nama_kategori, nama_bahan, nama_menu, deskripsi_menu, unit_menu, harga_menu);
+                                new Buku(id_menu, nama_kategori, nama_bahan, nama_menu, deskripsi_menu, unit_menu, harga_menu, path);
 
                         //menambahkan obejk user tadi ke list buku
                         listBuku.add(buku);

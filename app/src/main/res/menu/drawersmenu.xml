@@ -6,23 +6,16 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/mahasiswa"
-            android:icon="@drawable/ic_baseline_people_alt_24"
-            android:iconTint="#0091EA"
-            android:title="Mahasiswa"
-            app:showAsAction="never"></item>
-
-        <item
             android:id="@+id/buku"
-            android:icon="@drawable/ic_baseline_menu_book_24"
-            android:iconTint="#0091EA"
-            android:title="Buku"
+            android:icon="@drawable/ic_baseline_fastfood_24"
+            android:iconTint="#6B0F1A"
+            android:title="Menu"
             app:showAsAction="never"></item>
 
         <item
             android:id="@+id/scanqr"
-            android:icon="@drawable/ic_baseline_shopping_cart_24"
-            android:iconTint="#0091EA"
+            android:icon="@drawable/ic_baseline_qr_code_scanner_24"
+            android:iconTint="#6B0F1A"
             android:title="Scan Qr"
             app:showAsAction="never"></item>
 

@@ -17,8 +17,11 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.atmakoreanbarbeque.API.BukuAPI;
 import com.atmakoreanbarbeque.Models.Buku;
 import com.atmakoreanbarbeque.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -62,7 +65,11 @@ public class AdapterBuku extends RecyclerView.Adapter<AdapterBuku.adapterBukuVie
         holder.txtNama.setText(buku.getNamaMenu());
         holder.txtPengarang.setText(buku.getDeskripsiMenu());
         holder.txtHarga.setText("Rp "+ formatter.format(buku.getHarga()));
-
+        Glide.with(context)
+                .load(BukuAPI.ROOT_URL+buku.getPath())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(holder.ivGambar);
 
     }
 
@@ -99,8 +106,7 @@ public class AdapterBuku extends RecyclerView.Adapter<AdapterBuku.adapterBukuVie
                 else {
                     List<Buku> filteredList = new ArrayList<>();
                     for(Buku buku : bukuList) {
-                        if(String.valueOf(buku.getNamaMenu()).toLowerCase().contains(userInput) ||
-                                buku.getDeskripsiMenu().toLowerCase().contains(userInput)) {
+                        if(String.valueOf(buku.getNamaMenu()).toLowerCase().contains(userInput)) {
                             filteredList.add(buku);
                         }
                     }

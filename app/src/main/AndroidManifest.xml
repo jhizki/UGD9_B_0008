@@ -28,6 +28,9 @@
         <activity
             android:name="com.atmakoreanbarbeque.Adapters.AdapterMahasiswa"
             tools:ignore="Instantiatable" />
+        <activity
+            android:name="com.atmakoreanbarbeque.Views.ScanQr"
+            tools:ignore="Instantiatable" />
         <activity android:name="com.atmakoreanbarbeque.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

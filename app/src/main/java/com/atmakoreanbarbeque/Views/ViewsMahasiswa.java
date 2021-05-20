@@ -87,22 +87,7 @@ public class ViewsMahasiswa extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.btnSearch).setVisible(true);
-        menu.findItem(R.id.btnAdd).setVisible(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.btnAdd) {
-            Bundle data = new Bundle();
-            data.putString("status", "tambah");
-            TambahEditMahasiswa tambahEditMahasiswa = new TambahEditMahasiswa();
-            tambahEditMahasiswa.setArguments(data);
-
-            loadFragment(tambahEditMahasiswa);
-        }
-        return super.onOptionsItemSelected(item);
+        menu.findItem(R.id.btnAdd).setVisible(false);
     }
 
     public void loadDaftarMahasiswa(){
@@ -158,7 +143,7 @@ public class ViewsMahasiswa extends Fragment {
                 progressDialog.dismiss();
                 try {
                     //Mengambil data response json object yang berupa data mahasiswa
-                    JSONArray jsonArray = response.getJSONArray("mahasiswa");
+                    JSONArray jsonArray = response.getJSONArray("data");
 
                     if(!listMahasiswa.isEmpty())
                         listMahasiswa.clear();
@@ -174,11 +159,10 @@ public class ViewsMahasiswa extends Fragment {
                         String nama_menu         = jsonObject.optString("nama_menu");
                         String deskripsi_menu        = jsonObject.optString("deskripsi_menu");
                         Double harga_menu            = jsonObject.optDouble("harga_menu");
-                        String path         = jsonObject.optString("path");
 
                         //membuat objek buku
                         Mahasiswa mahasiswa =
-                                new Mahasiswa(id_menu, nama_kategori, nama_bahan, nama_menu, deskripsi_menu, unit_menu, harga_menu, path);
+                                new Mahasiswa(id_menu, nama_kategori, nama_bahan, nama_menu, deskripsi_menu, unit_menu, harga_menu);
 
 
                         //Menambahkan objek user tadi ke list user

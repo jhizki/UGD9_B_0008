@@ -11,16 +11,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.atmakoreanbarbeque.Views.ScanQr;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.atmakoreanbarbeque.Views.ViewsBuku;
-import com.atmakoreanbarbeque.Views.ScanQr;
-import com.atmakoreanbarbeque.Views.ViewsCart;
 import com.atmakoreanbarbeque.Views.ViewsMahasiswa;
 import com.google.android.material.navigation.NavigationView;
 
@@ -55,10 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView gambar = (ImageView) view.findViewById(R.id.imageView);
         Glide.with(this)
-                .load("https://cdn1-production-images-kly.akamaized.net/JZt3TUJdpsXZ7LmUnL" +
-                        "fuAg8YN54=/640x360/smart/filters:quality(75):strip_icc():format(jpeg)" +
-                        "/kly-media-production/medias/1042321/original/088524000_1446544114-amazon" +
-                        "_books.jpg")
+                .load("https://i.ytimg.com/vi/FMyEkfkYZ1U/maxresdefault.jpg")
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(gambar);
@@ -72,18 +69,18 @@ public class MainActivity extends AppCompatActivity {
                 closeDrawer();
                 switch (id)
                 {
-                    case R.id.mahasiswa :
-                        loadFragment(new ViewsMahasiswa());
-                        break;
+//                    case R.id.mahasiswa :
+//                        loadFragment(new ViewsMahasiswa());
+//                        break;
                     case R.id.buku :
                         loadFragment(new ViewsBuku());
                         break;
                     case R.id.scanqr :
-                        loadFragment(new ScanQr());
+                        startActivity(new Intent(MainActivity.this, ScanQr.class));
                         break;
-                    //case R.id.transaksi :
-                        //loadFragment(new ViewsCart());
-                        //break;
+//                    case R.id.transaksi :
+//                        loadFragment(new ViewsCart());
+//                        break;
                     case R.id.keluar :
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setMessage("Anda yakin ingin keluar ?");

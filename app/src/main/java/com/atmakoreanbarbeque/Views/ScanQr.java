@@ -1,16 +1,16 @@
 package com.atmakoreanbarbeque.Views;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
-import androidx.fragment.app.Fragment;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class ScanQr extends Fragment implements ZXingScannerView.ResultHandler {
+public class ScanQr extends AppCompatActivity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
 
     @Override

@@ -5,10 +5,10 @@ import java.io.Serializable;
 public class Mahasiswa implements Serializable {
 
     private int id_menu;
-    private String nama_kategori, nama_bahan, nama_menu, deskripsi_menu, unit_menu, path;
+    private String nama_kategori, nama_bahan, nama_menu, deskripsi_menu, unit_menu;
     private Double harga_menu;
 
-    public Mahasiswa (int id_menu, String nama_kategori, String nama_bahan, String nama_menu, String deskripsi_menu, String unit_menu, Double harga_menu, String path) {
+    public Mahasiswa (int id_menu, String nama_kategori, String nama_bahan, String nama_menu, String deskripsi_menu, String unit_menu, Double harga_menu) {
         this.id_menu = id_menu;
         this.nama_kategori = nama_kategori;
         this.nama_bahan = nama_bahan;
@@ -16,7 +16,6 @@ public class Mahasiswa implements Serializable {
         this.deskripsi_menu = deskripsi_menu;
         this.unit_menu = unit_menu;
         this.harga_menu = harga_menu;
-        this.path = path;
     }
 
     public Mahasiswa (String nama_menu, String deskripsi_menu, Double harga_menu) {
@@ -33,9 +32,6 @@ public class Mahasiswa implements Serializable {
         return id_menu;
     }
 
-    public String getPath() {
-        return path;
-    }
 
     public String getNamaMenu() {
         return nama_menu;
